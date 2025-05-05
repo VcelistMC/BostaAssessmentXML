@@ -9,12 +9,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.peter.bosta_assessment.R
 import com.peter.bosta_assessment.cities_list.data.models.City
 import com.peter.bosta_assessment.cities_list.ui.adapters.CitiesAdapter
+import com.peter.bosta_assessment.cities_list.ui.viewmodels.CitiesListViewModel
+import com.peter.bosta_assessment.common.ui.BaseFragment
 import com.peter.bosta_assessment.databinding.FragmentCitiesListBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class CitiesListFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    lateinit var cityAdapter: CitiesAdapter
-    lateinit var binding: FragmentCitiesListBinding
+@AndroidEntryPoint
+class CitiesListFragment @Inject constructor() : BaseFragment<CitiesListViewModel>() {
+    private lateinit var cityAdapter: CitiesAdapter
+    private lateinit var binding: FragmentCitiesListBinding
 
 
     override fun onCreateView(
