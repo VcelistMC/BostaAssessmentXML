@@ -2,4 +2,6 @@
     <string name="app_name">Bosta Assessment</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="choose_the_delivery_area"><b>Choose the delivery area</b></string>
+    <string name="city_area">City/Area</string>
 </resources>
