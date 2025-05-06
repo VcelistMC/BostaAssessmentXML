@@ -33,7 +33,23 @@ class CitiesListFragment @Inject constructor() : BaseFragment<CitiesListViewMode
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        cityAdapter = CitiesAdapter(City.mockList)
+        initRecycler()
+        initObservers()
+        viewModel.getCities()
+    }
+
+    private fun initObservers(){
+        viewModel.isLoading.observe(viewLifecycleOwner){ isLoading ->
+            binding.loading.visibility = if(isLoading) View.VISIBLE else View.GONE
+        }
+
+        viewModel.cityList.observe(viewLifecycleOwner){ list ->
+            cityAdapter.setCities(list)
+        }
+    }
+
+    private fun initRecycler(){
+        cityAdapter = CitiesAdapter(emptyList())
         binding.cities.layoutManager = LinearLayoutManager(requireContext())
         binding.cities.adapter = cityAdapter
     }

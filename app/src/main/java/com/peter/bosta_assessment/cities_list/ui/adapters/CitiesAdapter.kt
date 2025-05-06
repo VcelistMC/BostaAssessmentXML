@@ -10,37 +10,24 @@ import com.peter.bosta_assessment.R
 import com.peter.bosta_assessment.cities_list.data.models.City
 import com.peter.bosta_assessment.databinding.CityItemBinding
 
-class CitiesAdapter(private val cities: List<City>): RecyclerView.Adapter<CitiesAdapter.CityViewHolder>() {
+class CitiesAdapter(private var cities: List<City>): RecyclerView.Adapter<CitiesAdapter.CityViewHolder>() {
     private lateinit var binding: CityItemBinding
-
+    private val expandedItemsIds = HashSet<String>()
 
     class CityViewHolder(private val binding: CityItemBinding): RecyclerView.ViewHolder(binding.root){
-        private var _isExpanded = false
 
-        val isExpanded: Boolean
-            get() = _isExpanded
-
-        fun bindItem(city: City){
+        fun bindItem(city: City, isExpanded: Boolean){
             binding.cityTextView.text = city.cityName
             binding.districtRv.adapter = DistrictsAdapter(city.districts)
             binding.districtRv.layoutManager = LinearLayoutManager(binding.root.context)
             binding.districtRv.setHasFixedSize(true)
 
-            bindClickEvent()
+            binding.districtRv.visibility = if(isExpanded) View.VISIBLE else View.GONE
         }
 
-        private fun toggleDistrictsVisibility(){
-            _isExpanded = !isExpanded
-            binding.districtRv.visibility = if(_isExpanded) View.VISIBLE else View.GONE
-        }
-
-        fun bindClickEvent(){
+        fun bindClickEvent(onClick: () -> Unit){
             binding.textImageGroup.setOnClickListener {
-                toggleDistrictsVisibility()
-                binding.arrowIndicator.setImageResource(
-                    if(isExpanded) R.drawable.caret_up
-                    else R.drawable.caret_down
-                )
+                onClick()
             }
         }
     }
@@ -56,10 +43,26 @@ class CitiesAdapter(private val cities: List<City>): RecyclerView.Adapter<Cities
 
     override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
         val city = cities[position]
-        holder.bindItem(city)
+        val isExpanded = expandedItemsIds.contains(city.cityId)
+
+        holder.bindItem(city, isExpanded)
+        holder.bindClickEvent {
+            if(isExpanded){
+                expandedItemsIds.remove(city.cityId)
+            }else{
+                expandedItemsIds.add(city.cityId)
+            }
+            notifyItemChanged(position)
+        }
     }
 
     override fun getItemCount(): Int {
         return cities.size
+    }
+
+
+    fun setCities(citiesList: List<City>){
+        cities = citiesList
+        notifyDataSetChanged()
     }
 }
