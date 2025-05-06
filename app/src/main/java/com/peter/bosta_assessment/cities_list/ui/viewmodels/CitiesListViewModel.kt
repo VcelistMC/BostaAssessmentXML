@@ -17,7 +17,7 @@ import javax.inject.Inject
 class CitiesListViewModel @Inject constructor(
     private val cityRepo: CityRepo
 ): BaseViewModel() {
-    private val _isLoading = MutableLiveData<Boolean>(false)
+    private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean>
         get() = _isLoading
 
@@ -37,20 +37,37 @@ class CitiesListViewModel @Inject constructor(
         }
     }
 
-    fun searchCities(text: String?){
-        if(text != null && (text.isEmpty() || text.isBlank())){
-            _cityList.postValue(fullCityList)
-        }else{
-            val filtered = fullCityList.filter { city ->
-                city.cityName.lowercase().startsWith(text!!.lowercase())
-            }
+    fun searchCities(text: String?) {
+        val query = text?.lowercase()?.trim().orEmpty()
 
-            _cityList.postValue(filtered)
+        if (query.isBlank()) {
+            _cityList.postValue(fullCityList)
+            return
         }
+
+        // filter cities where either the city or at least one district matches
+        val matchingCities = fullCityList.filter { city ->
+            city.cityName.lowercase().startsWith(query) ||
+            city.districts.any { district ->
+                district.districtName.lowercase().startsWith(query)
+            }
+        }
+
+        val refinedResults = matchingCities.map { city ->
+            val cityNameMatches = city.cityName.lowercase().startsWith(query)
+
+            if (cityNameMatches) {
+                // If the city name matches, keep it and all its districts
+                city
+            } else {
+                // Otherwise, keep only the matching districts
+                val matchingDistricts = city.districts.filter { district ->
+                    district.districtName.lowercase().startsWith(query)
+                }
+                city.copy(districts = matchingDistricts)
+            }
+        }
+
+        _cityList.postValue(refinedResults)
     }
 }
-
-
-// TODO: error handling
-// TODO: search functionality
-// TODO: uncovered thing
