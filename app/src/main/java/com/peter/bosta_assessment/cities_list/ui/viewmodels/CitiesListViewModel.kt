@@ -39,35 +39,7 @@ class CitiesListViewModel @Inject constructor(
 
     fun searchCities(text: String?) {
         val query = text?.lowercase()?.trim().orEmpty()
-
-        if (query.isBlank()) {
-            _cityList.postValue(fullCityList)
-            return
-        }
-
-        // filter cities where either the city or at least one district matches
-        val matchingCities = fullCityList.filter { city ->
-            city.cityName.lowercase().startsWith(query) ||
-            city.districts.any { district ->
-                district.districtName.lowercase().startsWith(query)
-            }
-        }
-
-        val refinedResults = matchingCities.map { city ->
-            val cityNameMatches = city.cityName.lowercase().startsWith(query)
-
-            if (cityNameMatches) {
-                // If the city name matches, keep it and all its districts
-                city
-            } else {
-                // Otherwise, keep only the matching districts
-                val matchingDistricts = city.districts.filter { district ->
-                    district.districtName.lowercase().startsWith(query)
-                }
-                city.copy(districts = matchingDistricts)
-            }
-        }
-
-        _cityList.postValue(refinedResults)
+        val filteredCities = cityRepo.filterCities(query)
+        _cityList.postValue(filteredCities)
     }
 }
