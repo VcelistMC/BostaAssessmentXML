@@ -2,11 +2,11 @@ package com.peter.bosta_assessment.cities_list.data.mappers
 
 import com.peter.bosta_assessment.cities_list.data.dtos.CityDTO
 import com.peter.bosta_assessment.cities_list.data.models.City
+import javax.inject.Inject
 
-class CityMapper: IMapper<City, CityDTO> {
-
-    //dont forget to inject this
-    val districtMapper = DistrictMapper()
+class CityMapper @Inject constructor(
+    private val districtMapper: DistrictMapper
+): IMapper<City, CityDTO> {
 
     override fun mapToModel(dto: CityDTO): City {
         return City(

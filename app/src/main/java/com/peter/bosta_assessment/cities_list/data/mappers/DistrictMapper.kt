@@ -4,8 +4,9 @@ import com.peter.bosta_assessment.cities_list.data.dtos.CityDTO
 import com.peter.bosta_assessment.cities_list.data.dtos.DistrictDTO
 import com.peter.bosta_assessment.cities_list.data.models.City
 import com.peter.bosta_assessment.cities_list.data.models.District
+import javax.inject.Inject
 
-class DistrictMapper: IMapper<District, DistrictDTO> {
+class DistrictMapper @Inject constructor(): IMapper<District, DistrictDTO> {
     override fun mapToModel(dto: DistrictDTO): District {
         return District(
             zoneId = dto.zoneId,

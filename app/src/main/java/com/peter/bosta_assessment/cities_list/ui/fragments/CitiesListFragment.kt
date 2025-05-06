@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.peter.bosta_assessment.R
 import com.peter.bosta_assessment.cities_list.data.models.City
@@ -35,7 +36,14 @@ class CitiesListFragment @Inject constructor() : BaseFragment<CitiesListViewMode
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
         initObservers()
+        initListeners()
         viewModel.getCities()
+    }
+
+    private fun initListeners() {
+        binding.searchField.doOnTextChanged { text, _, _, _ ->
+            viewModel.searchCities(text.toString())
+        }
     }
 
     private fun initObservers(){

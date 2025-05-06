@@ -19,7 +19,7 @@
         android:layout_marginTop="12dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/search"
+        android:id="@+id/search_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -30,6 +30,7 @@
         app:layout_constraintTop_toBottomOf="@id/title">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/city_area"
@@ -42,7 +43,7 @@
         android:layout_width="match_parent"
         android:visibility="gone"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/search"
+        app:layout_constraintTop_toBottomOf="@id/search_group"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -52,7 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         tools:listitem="@layout/city_item"
-        app:layout_constraintTop_toBottomOf="@id/search"
+        app:layout_constraintTop_toBottomOf="@id/search_group"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

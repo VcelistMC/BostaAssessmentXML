@@ -23,6 +23,11 @@ class CitiesAdapter(private var cities: List<City>): RecyclerView.Adapter<Cities
             binding.districtRv.setHasFixedSize(true)
 
             binding.districtRv.visibility = if(isExpanded) View.VISIBLE else View.GONE
+
+            binding.arrowIndicator.setImageResource(
+                if(isExpanded) R.drawable.caret_up
+                else R.drawable.caret_down
+            )
         }
 
         fun bindClickEvent(onClick: () -> Unit){
