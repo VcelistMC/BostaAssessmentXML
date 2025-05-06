@@ -25,15 +25,12 @@ class CitiesListViewModel @Inject constructor(
     val cityList: LiveData<List<City>>
         get() = _cityList
 
-    private var fullCityList = emptyList<City>()
-
     fun getCities(){
         viewModelScope.launch {
             _isLoading.postValue(true)
             val cities = cityRepo.getCities("60e4482c7cb7d4bc4849c4d5")
             _isLoading.postValue(false)
             _cityList.postValue(cities)
-            fullCityList = cities
         }
     }
 
