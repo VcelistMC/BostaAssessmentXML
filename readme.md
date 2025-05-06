@@ -34,9 +34,9 @@ This project is an Android application developed as part of a technical assessme
 - **RecyclerView:**  
   Used to display the list of cities and their districts.
 - **Search Functionality:**
-    - Real-time filtering of cities and districts as the user types.
-    - The search is case-insensitive and matches both city names and district names.
-    - If a city matches, all its districts are shown; if only districts match, only those districts are shown under their city.
+  - Real-time filtering of cities and districts as the user types.
+  - The search is case-insensitive and matches both city names and district names.
+  - If a city matches, all its districts are shown; if only districts match, only those districts are shown under their city.
 
 ### 5. **Asynchronous Operations**
 - **Coroutines:**  
@@ -52,6 +52,8 @@ This project is an Android application developed as part of a technical assessme
 | **Retrofit**           | Networking (HTTP client)                     |
 | **Gson**               | JSON serialization/deserialization           |
 | **ViewBinding**        | Type-safe view access                        |
+| **Mockito**            | Mocking library                              |
+| **JUnit**              | Testing library                              |
 
 ---
 
@@ -59,35 +61,35 @@ This project is an Android application developed as part of a technical assessme
 ## Code Snippet: Search Logic
 
 ```kotlin
-fun searchCities(text: String?) {
-    val query = text?.lowercase()?.trim().orEmpty()
+fun filterCities(query: String): List<City>{
+  if (query.isBlank()) {
+    return fullCityList
+  }
 
-    if (query.isBlank()) {
-        _cityList.postValue(fullCityList)
-        return
-    }
-
-    val matchingCities = fullCityList.filter { city ->
-        city.cityName.lowercase().startsWith(query) ||
-        city.districts.any { district ->
-            district.districtName.lowercase().startsWith(query)
-        }
-    }
-
-    val refinedResults = matchingCities.map { city ->
-        val cityNameMatches = city.cityName.lowercase().startsWith(query)
-
-        if (cityNameMatches) {
-            city
-        } else {
-            val matchingDistricts = city.districts.filter { district ->
-                district.districtName.lowercase().startsWith(query)
+  // filter cities where either the city or at least one district matches
+  val matchingCities = fullCityList.filter { city ->
+    city.cityName.lowercase().startsWith(query) ||
+            city.districts.any { district ->
+              district.districtName.lowercase().startsWith(query)
             }
-            city.copy(districts = matchingDistricts)
-        }
-    }
+  }
 
-    _cityList.postValue(refinedResults)
+  val refinedResults = matchingCities.map { city ->
+    val cityNameMatches = city.cityName.lowercase().startsWith(query)
+
+    if (cityNameMatches) {
+      // If the city name matches, keep it and all its districts
+      city
+    } else {
+      // Otherwise, keep only the matching districts
+      val matchingDistricts = city.districts.filter { district ->
+        district.districtName.lowercase().startsWith(query)
+      }
+      city.copy(districts = matchingDistricts)
+    }
+  }
+
+  return refinedResults
 }
 ```
 
