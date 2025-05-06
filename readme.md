@@ -13,9 +13,9 @@ This project is an Android application developed as part of a technical assessme
 - **MVVM Pattern:**  
   The app follows the Model-View-ViewModel (MVVM) architecture, separating concerns between UI, business logic, and data sources.
 - **Clean Code Principles:**  
-  Code is organized into clear packages: `data`, `ui`, `viewmodels`, and `common`, promoting modularity and reusability.
+  Code is organized into clear packages: `data`, `ui`, `viewmodels`, etc...
 - **Base Classes:**  
-  Common functionality for Fragments and ViewModels is abstracted into base classes (`BaseFragment`, `BaseViewModel`), reducing boilerplate.
+  Common functionality for Fragments and ViewModels is abstracted into base classes (`BaseFragment`, `BaseViewModel`).
 
 ### 2. **Dependency Injection**
 - **Hilt (Dagger):**  
